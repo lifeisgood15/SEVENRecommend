@@ -1,0 +1,39 @@
+<div class="jumbotron">
+    <div class="feedback-status">
+        <% if(locals.errors) {%>
+        <div class="alert alert-danger">
+          <ul>
+            
+            <li><%= errors %></li>
+          </ul>
+        </div>
+    <% } %> 
+      </div>
+    <form class="row" method="POST" action="/signup" >
+        <div class="col-12">
+            <div class="form-group">
+                <label for="account-fn">User Name</label>
+                <input class="form-control" type="text" id="account-fn"  name="username"  pattern="[A-Za-z0-9 ]{3,20}" required>
+            </div>
+        </div>
+       
+        <div class="col-12">
+            <div class="form-group">
+                <label for="account-email">E-mail Address</label>
+                <input class="form-control" type="email" id="account-email" name="email" required>
+            </div>
+        </div>
+        
+        <div class="col-12">
+            <div class="form-group">
+                <label for="account-pass">Password</label>
+                <input class="form-control" type="password" id="account-pass" name="password" required>
+            </div>
+        </div>
+        
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>
+        </div> 
+    </form>
+    
+</div>

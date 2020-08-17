@@ -1,0 +1,63 @@
+<div class="jumbotron">
+    
+        <% if(locals.errors) {%>
+            <div class="feedback-status">
+            <div class="alert alert-danger">
+          <ul>
+           <% errors.forEach(error => {%>
+            <li><%= error %></li>
+            <%});%>
+          </ul>
+        </div>
+        <%} else if(locals.successMessage) {%>
+            <div class="alert alert-success">
+              <%= successMessage %>
+            </div>
+            <%}%>
+    <form class="row" method="POST" action="/settings" >
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="account-fn">User Name</label>
+                <input class="form-control" type="text" id="account-fn" value="<%= username %>" required="" name="username">
+            </div>
+        </div>
+       
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="account-email">E-mail Address</label>
+                <input class="form-control" type="email" id="account-email" value="<%=email%>" readonly="readonly" name="email">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label>Colour</label>
+            <select id="inputState" class="form-control" name="colour">
+              <option value="#db8f8f">Pink</option>
+              <option value="#dbc08f">Nude</option>
+              <option value="#a2db8f">Green</option>
+              <option value="#8fdbc0">Blue</option>
+              <option value="#8f95db">Navy</option>
+              <option value="#ad6fa8">Purple</option>
+              <option value="#ffffff">White</option>
+            </select>
+          </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="account-pass">Old Password</label>
+                <input class="form-control" type="password" id="account-pass" name="oldPassword">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="account-confirm-pass">New Password</label>
+                <input class="form-control" type="password" id="account-confirm-pass" name="newPassword">
+            </div>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-secondary btn-lg btn-block"  style="background-color:<%= colour %> ;">Update Profile</button>
+        </div>
+        
+    </form>
+    <div class="col-12" style="margin-top: 3rem;" >
+        <a class="btn  btn-secondary btn-lg btn-block"  style="background-color:<%= colour %> ;" href="/logout">Logout</a>
+    </div>
+</div>

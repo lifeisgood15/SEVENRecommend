@@ -1,0 +1,126 @@
+<div class="row">
+    <div class="col-sm-6">
+      <div class="card" id="profile">
+        <div class="card-body">
+          <h5 class="card-title">Add a new List</h5>
+          <form method="POST" action="/profile" >
+            <div class="feedback-status">
+              <% if(locals.errors) {%>
+              <div class="alert alert-danger">
+                <ul>
+                  <% errors.forEach(function (error) {%>
+                  <li><%= error%></li>
+                  <%})%>
+                </ul>
+              </div>
+              <%} else if(locals.successMessage) {%>
+              <div class="alert alert-success">
+                <%= successMessage %>
+              </div>
+              <%}%>
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select id="inputState" class="form-control" name="category" required>
+                <option>Movies</option>
+                <option>Shows</option>
+                <option>Sports</option>
+                <option>Music</option>
+                <option>Books</option>
+                <option>Anime</option>
+                <option>Cartoon</option>
+                <option>Memes</option>
+                <option>Quotes</option>
+                <option>Others</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="List Name" name="newListName" pattern="([A-Za-z0-9 ]{3,50})" required>
+            </div>
+
+            <div class="form-group">
+              <textarea class="form-control"  rows="2" pattern="([A-Za-z0-9.,' ]{3,200})" name="newListDescription"></textarea>
+            </div>
+            <% for (var i =1; i <=7;  i++ ) { %>
+            <div class="form-row">
+              <div class="form-group col-md-10" >
+                <input type="text" class="form-control" pattern="([A-Za-z0-9.,' ]{3,200})" placeholder="Item" name="item[<%= i %>]" required>
+              </div>
+              <a class="btn btn-outline-primary btn-sm form-group col-md-2" data-toggle="collapse" href="#description[<%=i%>]" id="moreButton">+</a>
+              <div class="form-group col-md-10 collapse" id="description[<%=i %>]">
+                <input type="text" class="form-control" pattern="([A-Za-z0-9./,' ]{3,50})" placeholder="Description/Link" name="description[<%=i%>]">
+              </div>
+            </div>
+            <% } %>
+
+            <button type="submit" class="btn btn-primary">Add</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <% if(locals.myLists) {%>
+      <% myLists.forEach(function(entry){%>
+        <div class="col-sm-6" >
+          <div class="card" id="profile" >
+            <div class="card-body">
+            <form action="/profile/delete" method="POST">
+              <div class="card-header">
+                <%= entry.category%> - <%= entry.list_name%> 
+                <input type="hidden" value="<%=entry._id  %>" name="listid"/>
+                <button type="submit" class="btn btn-primary">Delete</button>
+                <h6>- <%= entry.list_description%></h6>
+              </div>
+            </form>
+            
+              <ul class="list-group list-group-flush collapse" >
+                <div class="collapse show" id="collapseCard[<%=entry._id%>]">
+                  <% items.forEach(function(item){%> 
+                    <% if(item.get('list_id') == entry._id)  {%> 
+                    <li class="list-group-item">
+                      <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="collapse" href="#list-profile[<%=item.list_id%>][<%= item.item_order%>]" role="tab" aria-controls="profile"><%=item.item_order+1%>  <%=item.item_name%></a>
+                      <div class="collapse" id="list-profile[<%=item.list_id%>][<%= item.item_order%>]">
+                          <div class="card card-body">
+                            <%=item.item_description%>
+                          </div>
+                      </div></li>
+                    <% } %> 
+                  <%})%> 
+                </div>
+                <div class="collapse"id="collapseCard[<%=entry._id%>]">
+                  
+                  <form action="/profile/edit" method="POST">
+                    <% items.forEach(function(item){%>
+                      <% if(item.get('list_id') == entry._id)  {%>
+                      <div class="form-row">
+                        <div class="form-group col-md-1"><%= item.item_order+1 %></div>
+                        <div class="form-group col-md-11" >
+                          <input type="text" class="form-control" pattern="([A-Za-z0-9,' ]{3,50})" placeholder="Item" name="item[<%= item._id %>]" 
+                          value="<%=item.item_name%>"required>
+                          
+                        </div>
+                        
+                        <div class="form-group col-md-12">
+                          <input type="text" class="form-control" pattern="([A-Za-z0-9./ ]{3,50})" placeholder=" Add Description/Link" name="description[<%= item._id %>]" value="<%=item.item_description%>">
+                        </div>
+                      </div>
+                      <% }}) %>
+                      <button type="submit" class="btn btn-primary">Update</button>
+
+                  </form>
+                </div>
+              </ul>
+            <div class="card-footer text-muted">
+                by <%= entry.created_by %> on <%= entry.timestamp.getDate()%>/ <%= entry.timestamp.getMonth()+1%>/ <%= entry.timestamp.getFullYear()%>
+                <a href="#collapseCard[<%=entry._id%>]" data-toggle="collapse" class="btn btn-primary">Edit</a>
+            </div>
+        </div>
+    
+        
+      
+      </div>
+    </div>
+      <%})%> 
+          
+    <%}%>
+      
+</div>

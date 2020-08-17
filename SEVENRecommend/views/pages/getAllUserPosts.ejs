@@ -1,0 +1,58 @@
+<div class="jumbotron" style="background-color:<%=user.colour%>;">
+  <% if(locals.user) {%>
+    <form action="/save/user" method="POST">
+      <input type="hidden" value="<%=user.username %>" name="username"/>
+      <h1><%=user.username%> 
+        <% if ((locals.username!=null)&&(user.username!=locals.username)) {%>
+          <button type="submit" class="btn btn-success">Save User</button>
+        <%}%>
+      </h1>
+      
+    </form>
+<% } %> 
+</div>
+<div class="row">
+    <% if(locals.myLists) {%>
+      <% myLists.forEach(function(entry){%>
+        <div class="col-sm-6" id="<%= entry.category%>.<%= entry.list_name%>">
+          <div class="card" id="profile" >
+            <form action="/save/list" method="POST">
+                <div class="card-header">
+                    <%= entry.category%> - <%= entry.list_name%>
+                    <input type="hidden" value="<%=entry._id %>" name="listid"/>
+                    <% if ((locals.username!=null)&&(entry.created_by!=locals.email)) {%>
+                      <button type="submit" class="btn btn-success">Save</button>
+                    <%}%>
+                    <h6>- <%= entry.list_description%></h6>
+                  </div>
+            </form>
+              
+           
+            
+              <ul class="list-group list-group-flush" >
+                <% items.forEach(function(item){%> 
+                    <% if(item.get('list_id') == entry._id)  {%> 
+                    <li class="list-group-item">
+
+                      <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="collapse" href="#list-profile[<%=item.list_id%>][<%= item.item_order%>]" role="tab" aria-controls="profile"><%=item.item_order+1%>  <%=item.item_name%></a>
+
+                      <div class="collapse" id="list-profile[<%=item.list_id%>][<%= item.item_order%>]">
+                          <div class="card card-body">
+                            <%=item.item_description%>
+                          </div>
+                      </div>
+                    </li>
+                    <% } %> 
+                  <%})%>            
+              </ul>
+
+              
+          
+        </div>
+    
+        </div>
+      <%})%> 
+          
+    <%}%>
+      
+</div>

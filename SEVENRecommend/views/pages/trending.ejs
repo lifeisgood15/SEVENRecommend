@@ -1,0 +1,72 @@
+<div class="row">
+  <div class="col-sm-4">
+      <% if (locals.savedusers) {%>
+          <% savedusers.forEach(user => { %>
+              <a href="/search/<%=user%>">
+                  <div class="card" id="profile">
+                      <div class="card-body">
+                        <h5 class="card-title"><%=user%></h5>
+                      </div>
+                  </div>
+              </a>
+              
+          <% }) %>
+     <% } else{%>
+      <div class="card" id="profile">
+          <div class="card-body">
+            <h5 class="card-title">You can search for a user</h5>
+          </div>
+      </div>
+     <%} %>
+            
+
+  </div>
+  <div class="col-sm-8">
+      <% if (locals.lists) { %>
+          <% lists.forEach(list => { %>
+              <div class="card">
+                
+                  <form action="/save/list" method="POST">
+                    <div class="card-header">
+                        <%= list.category%> - <%= list.list_name%>
+                        <input type="hidden" value="<%=list._id%>" name="listid"/>
+                        <% if ((locals.username!=null)&&(list.created_by!=locals.email)) {%><button type="submit" class="btn btn-success">Save</button>
+                        <%}%>
+                        <h6>- <%= list.list_description%></h6>
+                    </div>
+                  </form>
+                
+                
+
+                  <ul class="list-group list-group-flush">
+                      <% items.forEach(item=>{%> 
+                          <% if(item.get('list_id') == list._id) {%> 
+                          <li class="list-group-item"><a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="collapse" href="#list-profile[<%=item.list_id%>][<%= item.item_order%>]" role="tab" aria-controls="profile"><%=item.item_order+1%>  <%=item.item_name%></a>
+                            <div class="collapse" id="list-profile[<%=item.list_id%>][<%= item.item_order%>]">
+                                <div class="card card-body">
+                                  <%=item.description%>
+                                </div>
+                            </div></li>
+                          <% } %> 
+                        <%})%>
+  
+                  </ul>
+                  <div class="card-footer text-muted">
+                      <a href="/search/<%= list.created_by %>"><%= list.created_by %></a>  on <%= list.timestamp.getDate()%>/ <%= list.timestamp.getMonth()+1%>/ <%= list.timestamp.getFullYear()%>
+                    </div>
+              </div>
+          <% }) %>
+      <% } else{%>
+          <div class="card" id="profile">
+              <div class="card-body">
+                <h5 class="card-title">Or search for a list</h5>
+              </div>
+          </div>
+         <%} %>
+      
+      
+     
+      
+  </div>
+  
+</div>
